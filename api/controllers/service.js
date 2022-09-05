@@ -29,11 +29,30 @@ export const getUser = async (req,res,next)=>{
     next(err);
   }
 }
-export const getUsers = async (req,res,next)=>{
-  try {
-    const users = await Services.find();
-    res.status(200).json(users);
-  } catch (err) {
-    next(err);
-  }
-}
+// export const getUsers = async (req,res,next)=>{
+//   try {
+//     const users = await Services.find();
+//     res.status(200).json(users);
+//   } catch (err) {
+//     next(err);
+//   }
+// }
+
+export const getUsers = (async (req, res) => {
+  
+
+  const keyword = req.query.keyword
+    ? {
+      speciality: {
+          $regex: req.query.keyword,
+          $options: 'i',
+        },
+      }
+    : {}
+
+    
+  
+  const users= await Services.find({ ...keyword })
+
+  res.json(users)
+})

@@ -3,8 +3,7 @@ import {
   updateUser,
   deleteUser,
   getUser,
-  getUsers
-
+  getUsers,
 } from "../controllers/service.js";
 //import verify  from "../veriftoken.js";
 
@@ -23,6 +22,8 @@ router.get("/:id",  getUser);
 
 //GET ALL
 router.get("/",getUsers);
+
+
 
 
 export default router;

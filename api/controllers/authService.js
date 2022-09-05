@@ -1,5 +1,4 @@
-
-import User from "../models/user.js"
+import Services from "../models/service.js"
 
 import bcrypt from "bcrypt"
 const rounds = 10
@@ -10,7 +9,7 @@ import verify from "../veriftoken.js"
 
 
 export const login = (req, res) => {
-    User.findOne({email: req.body.emaill})
+    Services.findOne({email: req.body.emaill})
     .then(user => {
         if(!user) res.status(404).json({error: 'no user with that email found'})
         else {
@@ -30,7 +29,7 @@ export const signup = (req, res) => {
     bcrypt.hash(req.body.password, rounds, (error, hash) => {
         if (error) res.status(500).json(error)
         else {
-            const newUser =  User({email: req.body.email,phone:req.body.phone,city:req.body.city,username:req.body.username, password: hash})
+            const newUser =  Services({email: req.body.email,phone:req.body.phone,city:req.body.city,username:req.body.username,speciality:req.body.speciality,experience:req.body.experience, password: hash})
             newUser.save()
                 .then(user => {
                     res.status(200).json({token: generateToken(user)})
