@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react"
 import { Link ,useNavigate} from "react-router-dom"
-//import {Header} from'../components/header'
 import "./styles.css"
 import registers from "../img/register.svg"
 import log from "../img/log.svg"
 import axios from 'axios'
 
-export const Sign = ({ location, history }) => {
+export const Signn = ({ location, history }) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
     username: "",
     city: "",
-    phone :""
-    
+    phone :"",
+    experience:"",
+    speciality:""
   });
   const navigate = useNavigate();
-  const {email,password,username,city,phone}=user;
+  const {email,password,username,city,phone,experience,speciality}=user;
   const onInputChange = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -26,7 +26,7 @@ export const Sign = ({ location, history }) => {
   const [message, setMessage] = useState(null)
   const onSubmit = async e => {
     e.preventDefault();
-    await axios.post(`http://localhost:8800/api/signup`,user);
+    await axios.post(`http://localhost:8800/apis/signup`,user);
    // navigate('/signinTalent')
     window.location.reload();
   };
@@ -37,7 +37,7 @@ export const Sign = ({ location, history }) => {
             'Content-Type': 'application/json'
         }
     }
-    axios.post(`http://localhost:8800/api/login`,{emaill,passwordd},config)
+    axios.post(`http://localhost:8800/apis/login`,{emaill,passwordd},config)
     .then(res=>{console.log("true");
         let token=res.data.token;
         window.localStorage.setItem("token",JSON.stringify(token));
@@ -141,6 +141,26 @@ export const Sign = ({ location, history }) => {
                 placeholder="city"
                 name="city"
                 value={city}
+                onChange={e => onInputChange(e)}
+              />
+            </div>
+            <div className="input-field">
+              <i className="fas fa-envelope"></i>
+              <input
+                type="text"
+                placeholder="experience"
+                name="experience"
+                value={experience}
+                onChange={e => onInputChange(e)}
+              />
+            </div>
+            <div className="input-field">
+              <i className="fas fa-envelope"></i>
+              <input
+                type="text"
+                placeholder="speciality"
+                name="speciality"
+                value={speciality}
                 onChange={e => onInputChange(e)}
               />
             </div>

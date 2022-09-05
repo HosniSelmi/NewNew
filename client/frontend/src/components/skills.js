@@ -1,56 +1,112 @@
 import  "../App.css"
 import React from 'react'
+import {  useState,useEffect } from "react";
+import TextField from "@mui/material/TextField";
+//import List from "./Components/List";
+import noImage from '../img/user.jpg'
+import "../tags.css"
+import axios from "axios";
+//import {BasicCard} from "./viewcandidat"
+import ima from '../img/user.jpg'
+import { Link ,useNavigate, useParams} from "react-router-dom"
+
 
 export const Skills = ()=>{
-    return (
-        <section className="skills" id="skills">
-        <div className="max-width">
-          <h2 className="title">My skills</h2>
-          <div className="skills-content">
-            <div className="column left">
-              <div className="text">My creative skills &amp; experiences.</div>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos, ratione error est recusandae consequatur, iusto illum deleniti quidem impedit, quos quaerat quis minima sequi. Cupiditate recusandae laudantium esse, harum animi aspernatur quisquam et delectus ipsum quam alias quaerat? Quasi hic quidem illum. Ad delectus natus aut hic explicabo minus quod.</p>
-              <a href="#">Read more</a>
-            </div>
-            <div className="column right">
-              <div className="bars">
-                <div className="info">
-                  <span>HTML</span>
-                  <span>90%</span>
-                </div>
-                <div className="line html" />
-              </div>
-              <div className="bars">
-                <div className="info">
-                  <span>CSS</span>
-                  <span>60%</span>
-                </div>
-                <div className="line css" />
-              </div>
-              <div className="bars">
-                <div className="info">
-                  <span>JavaScript</span>
-                  <span>80%</span>
-                </div>
-                <div className="line js" />
-              </div>
-              <div className="bars">
-                <div className="info">
-                  <span>PHP</span>
-                  <span>50%</span>
-                </div>
-                <div className="line php" />
-              </div>
-              <div className="bars">
-                <div className="info">
-                  <span>MySQL</span>
-                  <span>70%</span>
-                </div>
-                <div className="line mysql" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    )
+  const [inputText, setInputText] = useState("");
+  const [data,setData] = useState([]);
+  
+
+  let params = useParams();
+
+  let inputHandler = (e) => {
+    //convert input text to lower case
+    var lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
+
+  const navigate = useNavigate();
+
+  const keyword = params.keyword || ''
+  
+  useEffect(() => {
+   // const keyword = searchParams.get("keyword") ? searchParams.get("keyword") : ''
+  
+    loadUser();
+    
+  }, [keyword]);
+  
+  
+  const loadUser = async () => {
+    const result = await axios.get(`http://localhost:8800/api/services?keyword=${keyword}`);
+    setData(result.data);
+    console.log(keyword)
+    console.log(result.data);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    if (inputText.trim()) {
+     navigate(`/search/${inputText}`)
+    } else {
+      navigate('/')
+    }
+  }
+
+  return (
+    /*<div className="main">
+
+    
+      <h1>Candidates Search</h1>
+      <div className="search">
+      <form onSubmit={submitHandler} inline>
+      <input
+        type='text'
+        name='q'
+        onChange={(e) => setInputText(e.target.value)}
+        placeholder='Search Users...'
+        className='mr-sm-2 ml-sm-5'
+      />
+      <button type='submit' variant='outline-success' className='p-2'>
+        Search
+      </button>
+    </form>
+      </div> 
+     </div> 
+     */
+     <section className="teams" id="teams">
+     <div className="max-width">
+       <h2 className="title">Candidates Search</h2>
+       <div className="search">
+      <form onSubmit={submitHandler} inline>
+      <input
+        type='text'
+        name='q'
+        onChange={(e) => setInputText(e.target.value)}
+        placeholder='Search Users...'
+        className='mr-sm-2 ml-sm-5'
+      />
+      <button type='submit' variant='outline-success' className='p-2'>
+        Search
+      </button>
+    </form>
+      </div> 
+       <div className="carousel owl-caousel">
+       {data.map((user, index) => (  
+       <div key ={index} className="card">
+      <div className="box">
+        <img src={ima} alt />
+        <div className="text">{user.username}</div>
+         <a className=" mr-2" href={`/api/services/${user._id}`}>
+                    <i className="fa fa-eye" aria-hidden="true"></i> 
+                 </a>
+      </div>
+   
+    </div>
+       ))}
+      </div> 
+       
+     </div>
+   </section>
+    
+  );
 }
